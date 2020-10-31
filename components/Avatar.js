@@ -2,10 +2,9 @@ import React, {useState} from 'react';
 import {Image, StyleSheet} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import ImagePicker from 'react-native-image-picker';
+import {connect} from 'react-redux';
 
-const Avatar = (props) => {
-  const [avatar, setAvatar] = useState(require('../images/ic_tag_faces.png'));
-
+const Avatar = ({avatar, dispatch}) => {
   const _avatarClicked = () => {
     ImagePicker.showImagePicker((response) => {
       console.log('Response = ', response);
@@ -18,7 +17,8 @@ const Avatar = (props) => {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = {uri: response.uri};
-        setAvatar(source);
+        const action = {type: 'SET_AVATAR', value: source};
+        dispatch(action);
       }
     });
   };
@@ -47,4 +47,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Avatar;
+const mapStateToProps = (state) => {
+  return {
+    avatar: state.setAvatar.avatar,
+  };
+};
+
+export default connect(mapStateToProps)(Avatar);
