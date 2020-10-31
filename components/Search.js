@@ -1,19 +1,20 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   View,
   TextInput,
   Button,
   ActivityIndicator,
-} from "react-native";
-import { getFilmsFromApiWithSearchedText } from "../services/TMDApi";
-import { connect } from "react-redux";
-import FilmList from "./FilmList";
+} from 'react-native';
+import {getFilmsFromApiWithSearchedText} from '../services/TMDApi';
+import {connect} from 'react-redux';
+import FilmList from './FilmList';
+import Avatar from './Avatar';
 
 class Search extends React.Component {
   constructor(props) {
     super(props);
-    this.searchedText = "";
+    this.searchedText = '';
     this.page = 0;
     this.totalPages = 0;
     this.state = {
@@ -25,7 +26,7 @@ class Search extends React.Component {
 
   _loadFilms() {
     if (this.searchedText.length > 0) {
-      this.setState({ isLoading: true });
+      this.setState({isLoading: true});
       getFilmsFromApiWithSearchedText(this.searchedText, this.page + 1).then(
         (data) => {
           this.page = data.page;
@@ -34,7 +35,7 @@ class Search extends React.Component {
             films: [...this.state.films, ...data.results],
             isLoading: false,
           });
-        }
+        },
       );
     }
   }
@@ -52,7 +53,7 @@ class Search extends React.Component {
       },
       () => {
         this._loadFilms();
-      }
+      },
     );
   }
 
@@ -67,12 +68,16 @@ class Search extends React.Component {
   }
 
   _displayDetailForFilm = (idFilm) => {
-    this.props.navigation.navigate("Film Details", { idFilm: idFilm });
+    this.props.navigation.navigate('Film Details', {idFilm: idFilm});
   };
 
   render() {
+    console.log(this.props.avatar);
     return (
       <View style={styles.main_container}>
+        <View style={styles.avatar_container}>
+          <Avatar />
+        </View>
         <TextInput
           style={styles.textinput}
           placeholder="Titre du film"
@@ -102,24 +107,28 @@ const styles = StyleSheet.create({
   },
   textinput: {
     height: 50,
-    borderColor: "#000000",
+    borderColor: '#000000',
     borderWidth: 1,
     paddingLeft: 5,
   },
   loading_container: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
     top: 100,
     bottom: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatar_container: {
+    alignItems: 'center',
   },
 });
 
 const mapStateToProps = (state) => {
   return {
-    favoritesFilm: state.favoritesFilm,
+    favoritesFilm: state.toggleFavorite.favoritesFilm,
+    avatar: state.setAvatar.avatar,
   };
 };
 

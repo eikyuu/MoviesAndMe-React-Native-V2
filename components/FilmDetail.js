@@ -1,6 +1,6 @@
-import moment from "moment";
-import numeral from "numeral";
-import React, { useEffect, useState } from "react";
+import moment from 'moment';
+import numeral from 'numeral';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -9,33 +9,32 @@ import {
   StyleSheet,
   Text,
   View,
-} from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { getFilmDetailFromApi } from "../services/TMDApi";
-import { connect } from "react-redux";
-import EnlargeShrink from "../animations/EnlargeShrink";
+} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {getFilmDetailFromApi} from '../services/TMDApi';
+import {connect} from 'react-redux';
+import EnlargeShrink from '../animations/EnlargeShrink';
 
-const FilmDetail = ({ dispatch, route, favoritesFilm }) => {
+const FilmDetail = ({dispatch, route, favoritesFilm}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [film, setFilm] = useState(undefined);
 
   const id = route.params.idFilm;
 
   const _shareFilm = () => {
-    Share.share({ title: film.title, message: film.overview });
+    Share.share({title: film.title, message: film.overview});
   };
 
   const _displayFloatingActionButton = () => {
-    if (film != undefined && Platform.OS === "android") {
+    if (film != undefined && Platform.OS === 'android') {
       // Uniquement sur Android et lorsque le film est chargé
       return (
         <TouchableOpacity
           style={styles.share_touchable_floatingactionbutton}
-          onPress={() => _shareFilm()}
-        >
+          onPress={() => _shareFilm()}>
           <Image
             style={styles.share_image}
-            source={require("../images/ic_share.png")}
+            source={require('../images/ic_share.png')}
           />
         </TouchableOpacity>
       );
@@ -48,7 +47,7 @@ const FilmDetail = ({ dispatch, route, favoritesFilm }) => {
       setFilm(data);
       setIsLoading(false);
     } catch (error) {
-      console.log("erreur");
+      console.log('erreur');
     }
   };
 
@@ -57,11 +56,11 @@ const FilmDetail = ({ dispatch, route, favoritesFilm }) => {
   }, [id]);
 
   const _displayFavoriteImage = () => {
-    let sourceImage = require("../images/ic_favorite_border.png");
+    let sourceImage = require('../images/ic_favorite_border.png');
     let shouldEnLarge = true;
     if (favoritesFilm.findIndex((item) => item.id === film.id) !== -1) {
       // Film dans nos favoris
-      sourceImage = require("../images/ic_favorite.png");
+      sourceImage = require('../images/ic_favorite.png');
       shouldEnLarge = false;
     }
     return (
@@ -88,15 +87,14 @@ const FilmDetail = ({ dispatch, route, favoritesFilm }) => {
           <Image
             style={styles.image}
             source={{
-              uri: "https://image.tmdb.org/t/p/original" + film.backdrop_path,
+              uri: 'https://image.tmdb.org/t/p/original' + film.backdrop_path,
             }}
           />
           <Text style={styles.title_text}>{film.title}</Text>
 
           <TouchableOpacity
             style={styles.favorite_container}
-            onPress={() => dispatch({ type: "TOGGLE_FAVORITE", value: film })}
-          >
+            onPress={() => dispatch({type: 'TOGGLE_FAVORITE', value: film})}>
             {_displayFavoriteImage()}
           </TouchableOpacity>
           {_displayFloatingActionButton()}
@@ -104,7 +102,7 @@ const FilmDetail = ({ dispatch, route, favoritesFilm }) => {
           <Text style={styles.description_text}>{film.overview}</Text>
 
           <Text style={styles.default_text}>
-            Sorti le {moment(new Date(film.release_date)).format("DD/MM/YYYY")}
+            Sorti le {moment(new Date(film.release_date)).format('DD/MM/YYYY')}
           </Text>
           <Text style={styles.default_text}>
             Note : {film.vote_average} / 10
@@ -113,7 +111,7 @@ const FilmDetail = ({ dispatch, route, favoritesFilm }) => {
             Nombre de votes : {film.vote_count}
           </Text>
           <Text style={styles.default_text}>
-            Budget : {numeral(film.budget).format("0,0[.]00 $")}
+            Budget : {numeral(film.budget).format('0,0[.]00 $')}
           </Text>
           <Text style={styles.default_text}>
             Genre(s) :
@@ -121,7 +119,7 @@ const FilmDetail = ({ dispatch, route, favoritesFilm }) => {
               .map(function (genre) {
                 return genre.name;
               })
-              .join(" / ")}
+              .join(' / ')}
           </Text>
           <Text style={styles.default_text}>
             Companie(s) :
@@ -129,7 +127,7 @@ const FilmDetail = ({ dispatch, route, favoritesFilm }) => {
               .map(function (company) {
                 return company.name;
               })
-              .join(" / ")}
+              .join(' / ')}
           </Text>
         </ScrollView>
       );
@@ -149,13 +147,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loading_container: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   scrollview_container: {
     flex: 1,
@@ -165,23 +163,23 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   title_text: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 35,
     flex: 1,
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
     marginLeft: 5,
     marginRight: 5,
     marginTop: 10,
     marginBottom: 10,
-    color: "#000000",
-    textAlign: "center",
+    color: '#000000',
+    textAlign: 'center',
   },
   favorite_container: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   description_text: {
-    fontStyle: "italic",
-    color: "#666666",
+    fontStyle: 'italic',
+    color: '#666666',
     margin: 5,
     marginBottom: 15,
   },
@@ -199,9 +197,9 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: "#e91e63",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#e91e63',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   share_image: {
     width: 30,
@@ -211,7 +209,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    favoritesFilm: state.favoritesFilm,
+    favoritesFilm: state.toggleFavorite.favoritesFilm,
   };
 };
 
